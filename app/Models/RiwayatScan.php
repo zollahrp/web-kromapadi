@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class RiwayatScan extends Model
+{
+    protected $fillable = [
+        'user_id',
+        'lahan_id',
+        'penyakit',
+        'akurasi',
+        'tindakan',
+        'foto_path'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function lahan()
+    {
+        return $this->belongsTo(Lahan::class);
+    }
+}
