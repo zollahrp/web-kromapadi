@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::with('wilayah')->whereIn('role', ['super_admin', 'master_wilayah']);
+        $query = User::with('wilayah')->whereIn('role', ['super_admin', 'penyuluh']);
         
         if ($request->filled('search')) {
             $search = $request->search;
@@ -45,8 +45,8 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'role' => ['required', Rule::in(['super_admin', 'master_wilayah'])],
-            'wilayah_id' => 'required_if:role,master_wilayah|nullable|exists:wilayahs,id',
+            'role' => ['required', Rule::in(['super_admin', 'penyuluh'])],
+            'wilayah_id' => 'required_if:role,penyuluh|nullable|exists:wilayahs,id',
         ]);
 
         User::create([
@@ -54,7 +54,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make('password'),
             'role' => $request->role,
-            'wilayah_id' => $request->role === 'master_wilayah' ? $request->wilayah_id : null,
+            'wilayah_id' => $request->role === 'penyuluh' ? $request->wilayah_id : null,
         ]);
 
         return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan. (Kata sandi default: password)');
@@ -65,15 +65,15 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'role' => ['required', Rule::in(['super_admin', 'master_wilayah'])],
-            'wilayah_id' => 'required_if:role,master_wilayah|nullable|exists:wilayahs,id',
+            'role' => ['required', Rule::in(['super_admin', 'penyuluh'])],
+            'wilayah_id' => 'required_if:role,penyuluh|nullable|exists:wilayahs,id',
         ]);
 
         $data = [
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
-            'wilayah_id' => $request->role === 'master_wilayah' ? $request->wilayah_id : null,
+            'wilayah_id' => $request->role === 'penyuluh' ? $request->wilayah_id : null,
         ];
 
         $user->update($data);

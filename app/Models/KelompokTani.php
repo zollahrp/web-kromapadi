@@ -18,6 +18,11 @@ class KelompokTani extends Model
         return $this->belongsTo(User::class, 'master_admin_id');
     }
 
+    public function penyuluh()
+    {
+        return $this->belongsTo(User::class, 'master_admin_id');
+    }
+
     public function lahans()
     {
         return $this->hasMany(Lahan::class);

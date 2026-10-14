@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard - Mulyaharja')
+@section('title', 'Dashboard - PadiNexa')
 
 @section('content')
 <!-- Header Area -->
@@ -28,8 +28,8 @@
         </div>
         <div>
             <p class="text-xs font-medium text-gray-500 mb-0.5">Wilayah Aktif</p>
-            <h3 class="text-xl font-bold text-gray-900">1</h3>
-            <p class="text-[10px] text-gray-400 mt-0.5">{{ auth()->user()->wilayah ? auth()->user()->wilayah->name : 'Mulyaharja' }}</p>
+            <h3 class="text-xl font-bold text-gray-900">{{ $wilayahCount }}</h3>
+            <p class="text-[10px] text-gray-400 mt-0.5">{{ auth()->user()->wilayah ? auth()->user()->wilayah->name : 'Total wilayah' }}</p>
         </div>
     </div>
 
@@ -40,7 +40,7 @@
         </div>
         <div>
             <p class="text-xs font-medium text-gray-500 mb-0.5">Kelompok Tani</p>
-            <h3 class="text-xl font-bold text-gray-900">4</h3>
+            <h3 class="text-xl font-bold text-gray-900">{{ $kelompokTaniCount }}</h3>
             <p class="text-[10px] text-gray-400 mt-0.5">Total terdaftar</p>
         </div>
     </div>
@@ -52,7 +52,7 @@
         </div>
         <div>
             <p class="text-xs font-medium text-gray-500 mb-0.5">Lahan Terdaftar</p>
-            <h3 class="text-xl font-bold text-gray-900">18</h3>
+            <h3 class="text-xl font-bold text-gray-900">{{ $lahanCount }}</h3>
             <p class="text-[10px] text-gray-400 mt-0.5">Total lahan</p>
         </div>
     </div>
@@ -64,7 +64,7 @@
         </div>
         <div>
             <p class="text-xs font-medium text-gray-500 mb-0.5">Total Scan</p>
-            <h3 class="text-xl font-bold text-gray-900">156</h3>
+            <h3 class="text-xl font-bold text-gray-900">{{ $totalScanBulanIni }}</h3>
             <p class="text-[10px] text-gray-400 mt-0.5">Bulan ini</p>
         </div>
     </div>
@@ -76,7 +76,7 @@
         </div>
         <div>
             <p class="text-xs font-medium text-gray-500 mb-0.5">Riwayat Scan</p>
-            <h3 class="text-xl font-bold text-gray-900">156</h3>
+            <h3 class="text-xl font-bold text-gray-900">{{ $totalRiwayatScan }}</h3>
             <p class="text-[10px] text-gray-400 mt-0.5">Total riwayat</p>
         </div>
     </div>
@@ -107,101 +107,45 @@
                     </tr>
                 </thead>
                 <tbody class="text-sm text-gray-700 divide-y divide-gray-50">
-                    <!-- Dummy Row 1 -->
+                    @forelse($riwayatTerbaru as $riwayat)
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4 flex items-center gap-2 text-gray-500 whitespace-nowrap">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            27 Mei 2024 08:45
+                            {{ \Carbon\Carbon::parse($riwayat->created_at)->translatedFormat('d M Y H:i') }}
                         </td>
-                        <td class="px-6 py-4 font-medium text-gray-900">Tani Makmur</td>
-                        <td class="px-6 py-4">Sawah Makmur 1</td>
+                        <td class="px-6 py-4 font-medium text-gray-900">{{ $riwayat->lahan->kelompokTani->name ?? '-' }}</td>
+                        <td class="px-6 py-4">{{ $riwayat->lahan->name ?? '-' }}</td>
                         <td class="px-6 py-4">Padi</td>
                         <td class="px-6 py-4">
+                            <div>
+                            @if($riwayat->penyakit == 'Sehat' || $riwayat->penyakit == 'Normal')
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                 Sehat
                             </span>
-                        </td>
-                        <td class="px-6 py-4 flex items-center gap-2">
-                            <img src="https://ui-avatars.com/api/?name=Ahmad&background=F3F4F6" alt="A" class="w-6 h-6 rounded-full">
-                            Ahmad
-                        </td>
-                    </tr>
-                    <!-- Dummy Row 2 -->
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-6 py-4 flex items-center gap-2 text-gray-500 whitespace-nowrap">
-                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            27 Mei 2024 08:20
-                        </td>
-                        <td class="px-6 py-4 font-medium text-gray-900">Tani Sejahtera</td>
-                        <td class="px-6 py-4">Sawah Sejahtera 3</td>
-                        <td class="px-6 py-4">Padi</td>
-                        <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                Perlu Perhatian
+                            @elseif($riwayat->penyakit == 'Tidak Terdeteksi' || !$riwayat->penyakit)
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                Tidak Terdeteksi
                             </span>
-                        </td>
-                        <td class="px-6 py-4 flex items-center gap-2">
-                            <img src="https://ui-avatars.com/api/?name=Budi&background=F3F4F6" alt="B" class="w-6 h-6 rounded-full">
-                            Budi
-                        </td>
-                    </tr>
-                    <!-- Dummy Row 3 -->
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-6 py-4 flex items-center gap-2 text-gray-500 whitespace-nowrap">
-                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            26 Mei 2024 16:30
-                        </td>
-                        <td class="px-6 py-4 font-medium text-gray-900">Tani Subur</td>
-                        <td class="px-6 py-4">Sawah Subur 2</td>
-                        <td class="px-6 py-4">Padi</td>
-                        <td class="px-6 py-4">
+                            @else
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                Terdeteksi OPT
+                                {{ $riwayat->penyakit }}
                             </span>
+                            @endif
+                            </div>
+                            @if($riwayat->bwd_status)
+                            <div class="text-[10px] text-gray-500 mt-1">BWD: {{ $riwayat->bwd_status }} ({{ $riwayat->bwd_value }})</div>
+                            @endif
                         </td>
                         <td class="px-6 py-4 flex items-center gap-2">
-                            <img src="https://ui-avatars.com/api/?name=Siti&background=F3F4F6" alt="S" class="w-6 h-6 rounded-full">
-                            Siti
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($riwayat->user->name ?? 'User') }}&background=F3F4F6" alt="{{ substr($riwayat->user->name ?? 'U', 0, 1) }}" class="w-6 h-6 rounded-full">
+                            {{ explode(' ', $riwayat->user->name ?? 'User')[0] }}
                         </td>
                     </tr>
-                    <!-- Dummy Row 4 -->
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-6 py-4 flex items-center gap-2 text-gray-500 whitespace-nowrap">
-                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            26 Mei 2024 10:15
-                        </td>
-                        <td class="px-6 py-4 font-medium text-gray-900">Tani Maju</td>
-                        <td class="px-6 py-4">Sawah Maju 1</td>
-                        <td class="px-6 py-4">Padi</td>
-                        <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                Sehat
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 flex items-center gap-2">
-                            <img src="https://ui-avatars.com/api/?name=Rizky&background=F3F4F6" alt="R" class="w-6 h-6 rounded-full">
-                            Rizky
-                        </td>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">Belum ada riwayat scan.</td>
                     </tr>
-                    <!-- Dummy Row 5 -->
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-6 py-4 flex items-center gap-2 text-gray-500 whitespace-nowrap">
-                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            25 Mei 2024 14:05
-                        </td>
-                        <td class="px-6 py-4 font-medium text-gray-900">Tani Makmur</td>
-                        <td class="px-6 py-4">Sawah Makmur 2</td>
-                        <td class="px-6 py-4">Padi</td>
-                        <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                Perlu Perhatian
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 flex items-center gap-2">
-                            <img src="https://ui-avatars.com/api/?name=Ahmad&background=F3F4F6" alt="A" class="w-6 h-6 rounded-full">
-                            Ahmad
-                        </td>
-                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -215,31 +159,19 @@
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-base font-bold text-gray-900">Kalender</h2>
                 <div class="flex items-center gap-2 text-sm font-medium text-gray-700">
-                    Mei 2024
+                    <span id="calendarMonthYear"></span>
                     <div class="flex gap-1 ml-2 text-gray-400">
-                        <button class="hover:text-gray-900">&lt;</button>
-                        <button class="hover:text-gray-900">&gt;</button>
+                        <button id="prevMonthBtn" class="hover:text-gray-900">&lt;</button>
+                        <button id="nextMonthBtn" class="hover:text-gray-900">&gt;</button>
                     </div>
                 </div>
             </div>
-            <!-- Simple Mock Calendar Grid -->
+            <!-- Calendar Grid -->
             <div class="grid grid-cols-7 text-center text-xs font-semibold text-gray-400 mb-2">
                 <div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div><div>Min</div>
             </div>
-            <div class="grid grid-cols-7 text-center text-sm gap-y-2 text-gray-700">
-                <div class="text-gray-300 py-1">29</div><div class="text-gray-300 py-1">30</div>
-                <div class="py-1">1</div><div class="py-1">2</div><div class="py-1">3</div><div class="py-1">4</div><div class="py-1">5</div>
-                
-                <div class="py-1">6</div><div class="py-1">7</div><div class="py-1">8</div><div class="py-1">9</div><div class="py-1">10</div><div class="py-1">11</div><div class="py-1">12</div>
-                
-                <div class="py-1">13</div><div class="py-1">14</div><div class="py-1">15</div><div class="py-1">16</div><div class="py-1">17</div><div class="py-1">18</div><div class="py-1">19</div>
-                
-                <div class="py-1">20</div><div class="py-1">21</div><div class="py-1">22</div><div class="py-1">23</div><div class="py-1">24</div><div class="py-1">25</div><div class="py-1">26</div>
-                
-                <div class="py-1 bg-[#5C52E7] text-white rounded-full mx-auto w-7 h-7 flex items-center justify-center">27</div>
-                <div class="py-1 font-bold text-[#5C52E7]">28</div>
-                <div class="py-1">29</div><div class="py-1">30</div><div class="py-1">31</div>
-                <div class="text-gray-300 py-1">1</div><div class="text-gray-300 py-1">2</div>
+            <div id="calendarDays" class="grid grid-cols-7 text-center text-sm gap-y-2 text-gray-700">
+                <!-- Days will be generated by JS -->
             </div>
         </div>
 
@@ -247,12 +179,18 @@
         <div class="bg-white rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)] p-6 flex-1 flex flex-col justify-center">
             <div class="flex justify-between items-end mb-3">
                 <h2 class="text-base font-bold text-gray-900">Progress Scan Bulan Ini</h2>
-                <span class="text-xl font-bold text-gray-900">67%</span>
+                <span class="text-xl font-bold text-gray-900">
+                    @php 
+                        $target = 233; 
+                        $pct = $target > 0 ? min(100, round(($totalScanBulanIni / $target) * 100)) : 0;
+                    @endphp
+                    {{ $pct }}%
+                </span>
             </div>
             <div class="w-full bg-gray-100 rounded-full h-3 mb-2">
-                <div class="bg-[#5C52E7] h-3 rounded-full" style="width: 67%"></div>
+                <div class="bg-[#5C52E7] h-3 rounded-full" style="width: {{ $pct }}%"></div>
             </div>
-            <p class="text-sm text-gray-500">156 dari 233 target scan</p>
+            <p class="text-sm text-gray-500">{{ $totalScanBulanIni }} dari {{ $target }} target scan</p>
         </div>
 
     </div>
@@ -288,19 +226,19 @@
                 <div class="flex-1 space-y-3">
                     <div class="flex justify-between items-center text-sm">
                         <div class="flex items-center gap-2 text-gray-600"><span class="w-2.5 h-2.5 rounded-full bg-[#22C55E]"></span> Sehat</div>
-                        <div class="font-medium text-gray-900">60 <span class="text-gray-400 font-normal ml-1">(38%)</span></div>
+                        <div class="font-medium text-gray-900">{{ $distribusiScan['sehat'] }} <span class="text-gray-400 font-normal ml-1">({{ round(($distribusiScan['sehat']/$distribusiScan['total'])*100) }}%)</span></div>
                     </div>
                     <div class="flex justify-between items-center text-sm">
                         <div class="flex items-center gap-2 text-gray-600"><span class="w-2.5 h-2.5 rounded-full bg-[#EAB308]"></span> Perlu Perhatian</div>
-                        <div class="font-medium text-gray-900">50 <span class="text-gray-400 font-normal ml-1">(32%)</span></div>
+                        <div class="font-medium text-gray-900">{{ $distribusiScan['perlu_perhatian'] }} <span class="text-gray-400 font-normal ml-1">({{ round(($distribusiScan['perlu_perhatian']/$distribusiScan['total'])*100) }}%)</span></div>
                     </div>
                     <div class="flex justify-between items-center text-sm">
                         <div class="flex items-center gap-2 text-gray-600"><span class="w-2.5 h-2.5 rounded-full bg-[#EF4444]"></span> Terdeteksi OPT</div>
-                        <div class="font-medium text-gray-900">30 <span class="text-gray-400 font-normal ml-1">(19%)</span></div>
+                        <div class="font-medium text-gray-900">{{ $distribusiScan['terdeteksi_opt'] }} <span class="text-gray-400 font-normal ml-1">({{ round(($distribusiScan['terdeteksi_opt']/$distribusiScan['total'])*100) }}%)</span></div>
                     </div>
                     <div class="flex justify-between items-center text-sm">
                         <div class="flex items-center gap-2 text-gray-600"><span class="w-2.5 h-2.5 rounded-full bg-gray-400"></span> Tidak Terdeteksi</div>
-                        <div class="font-medium text-gray-900">16 <span class="text-gray-400 font-normal ml-1">(11%)</span></div>
+                        <div class="font-medium text-gray-900">{{ $distribusiScan['tidak_terdeteksi'] }} <span class="text-gray-400 font-normal ml-1">({{ round(($distribusiScan['tidak_terdeteksi']/$distribusiScan['total'])*100) }}%)</span></div>
                     </div>
                 </div>
             </div>
@@ -383,10 +321,10 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(ctxLine, {
         type: 'line',
         data: {
-            labels: ['21 Mei', '22 Mei', '23 Mei', '24 Mei', '25 Mei', '26 Mei', '27 Mei'],
+            labels: {!! json_encode($labels7Hari) !!},
             datasets: [{
                 label: 'Scan',
-                data: [13, 18, 24, 29, 16, 19, 26],
+                data: {!! json_encode($scan7HariTerakhir) !!},
                 borderColor: '#5C52E7',
                 backgroundColor: gradient,
                 borderWidth: 2,
@@ -440,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
         data: {
             labels: ['Sehat', 'Perlu Perhatian', 'Terdeteksi OPT', 'Tidak Terdeteksi'],
             datasets: [{
-                data: [60, 50, 30, 16],
+                data: [{{ $distribusiScan['sehat'] }}, {{ $distribusiScan['perlu_perhatian'] }}, {{ $distribusiScan['terdeteksi_opt'] }}, {{ $distribusiScan['tidak_terdeteksi'] }}],
                 backgroundColor: ['#22C55E', '#EAB308', '#EF4444', '#9CA3AF'],
                 borderWidth: 0,
                 hoverOffset: 4
@@ -460,6 +398,76 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // --- Calendar ---
+    const calendarMonthYear = document.getElementById('calendarMonthYear');
+    const calendarDays = document.getElementById('calendarDays');
+    const prevMonthBtn = document.getElementById('prevMonthBtn');
+    const nextMonthBtn = document.getElementById('nextMonthBtn');
+
+    let currentDate = new Date();
+
+    const monthNames = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
+
+    function renderCalendar() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const today = new Date();
+
+        calendarMonthYear.textContent = `${monthNames[month]} ${year}`;
+        calendarDays.innerHTML = '';
+
+        let firstDay = new Date(year, month, 1).getDay();
+        firstDay = firstDay === 0 ? 6 : firstDay - 1;
+
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const prevMonthDays = new Date(year, month, 0).getDate();
+
+        for (let i = firstDay - 1; i >= 0; i--) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'text-gray-300 py-1';
+            dayDiv.textContent = prevMonthDays - i;
+            calendarDays.appendChild(dayDiv);
+        }
+
+        for (let i = 1; i <= daysInMonth; i++) {
+            const dayDiv = document.createElement('div');
+            
+            if (year === today.getFullYear() && month === today.getMonth() && i === today.getDate()) {
+                dayDiv.className = 'py-1 bg-[#5C52E7] text-white rounded-full mx-auto w-7 h-7 flex items-center justify-center';
+            } else {
+                dayDiv.className = 'py-1 cursor-pointer hover:font-bold hover:text-[#5C52E7]';
+            }
+            
+            dayDiv.textContent = i;
+            calendarDays.appendChild(dayDiv);
+        }
+
+        const totalCells = calendarDays.children.length;
+        const remainingCells = (7 - (totalCells % 7)) % 7;
+        
+        for (let i = 1; i <= remainingCells; i++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'text-gray-300 py-1';
+            dayDiv.textContent = i;
+            calendarDays.appendChild(dayDiv);
+        }
+    }
+
+    prevMonthBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+    });
+
+    nextMonthBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+    });
+
+    renderCalendar();
 });
 </script>
 @endpush

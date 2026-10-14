@@ -38,7 +38,7 @@
 <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
         <h1 class="text-2xl font-bold text-gray-900">Kelompok Tani Dewasa (KTD)</h1>
-        @if(auth()->user()->role === 'master_wilayah' && auth()->user()->wilayah)
+        @if(auth()->user()->role === 'penyuluh' && auth()->user()->wilayah)
         <p class="text-gray-500 mt-1 text-sm">Kelola akun dan data Kelompok Tani Dewasa di Wilayah <strong class="text-gray-900">{{ auth()->user()->wilayah->name }}</strong>.</p>
         @else
         <p class="text-gray-500 mt-1 text-sm">Kelola akun dan data Kelompok Tani Dewasa di semua wilayah.</p>
@@ -131,7 +131,7 @@
         
         @if(auth()->user()->role === 'super_admin')
         <!-- Filter Wilayah (Super Admin) -->
-        <div class="w-full md:w-64 flex-shrink-0">
+        <div class="w-full md:w-auto md:flex-1 md:max-w-xs flex-shrink-0">
             <label class="block text-sm font-medium text-gray-700 mb-1 truncate">Wilayah</label>
             <select name="wilayah_id" id="filter_wilayah_id" onchange="document.getElementById('filterForm').submit()" class="mt-1 block w-full">
                 <option value="">Semua Wilayah</option>
@@ -389,9 +389,18 @@
                 btn.innerHTML = originalContent;
                 btn.disabled = false;
             }, function(error) {
-                alert('Gagal mengambil lokasi. Pastikan izin lokasi (location/GPS) diizinkan di browser Anda.');
+                let errorMessage = 'Gagal mengambil lokasi. Pastikan izin lokasi diizinkan.';
+                if (error.code === 1) errorMessage = 'Izin lokasi ditolak oleh pengguna.';
+                if (error.code === 2) errorMessage = 'Posisi tidak tersedia (perangkat tidak dapat mendeteksi lokasi).';
+                if (error.code === 3) errorMessage = 'Waktu permintaan lokasi habis (timeout).';
+                
+                alert(errorMessage);
                 btn.innerHTML = originalContent;
                 btn.disabled = false;
+            }, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
             });
         } else {
             alert("Fitur Geolocation tidak didukung oleh browser Anda.");

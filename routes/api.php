@@ -18,3 +18,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/wilayah', [ApiController::class, 'getWilayah']);
     Route::get('/petani', [ApiController::class, 'getPetani']);
 });
+Route::get('storage/{path}', function ($path) { $fullPath = storage_path('app/public/' . $path); if (!file_exists($fullPath)) abort(404); return response()->file($fullPath, ['Access-Control-Allow-Origin' => '*']); })->where('path', '.*');

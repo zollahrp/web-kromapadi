@@ -14,7 +14,7 @@ class LaporanController extends Controller
     {
         $user = auth()->user();
 
-        if (!in_array($user->role, ['super_admin', 'master_wilayah'])) {
+        if (!in_array($user->role, ['super_admin', 'penyuluh'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -28,8 +28,8 @@ class LaporanController extends Controller
             ->whereDate('created_at', '>=', $startDate)
             ->whereDate('created_at', '<=', $endDate);
 
-        // Filter berdasarkan peran Master Wilayah
-        if ($user->role === 'master_wilayah') {
+        // Filter berdasarkan peran Penyuluh
+        if ($user->role === 'penyuluh') {
             $query->whereHas('user', function ($q) use ($user) {
                 $q->where('wilayah_id', $user->wilayah_id);
             });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lahan;
 use App\Models\KelompokTani;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class LahanController extends Controller
 {
@@ -12,13 +13,13 @@ class LahanController extends Controller
     {
         $user = auth()->user();
 
-        if (!in_array($user->role, ['super_admin', 'master_wilayah'])) {
+        if (!in_array($user->role, ['super_admin', 'penyuluh'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         $query = Lahan::with(['kelompokTani', 'uploader']);
 
-        if ($user->role === 'master_wilayah') {
+        if ($user->role === 'penyuluh') {
             $query->where('uploaded_by', $user->id);
             $ktds = KelompokTani::where('wilayah_id', $user->wilayah_id)->get();
         } else {
@@ -49,26 +50,33 @@ class LahanController extends Controller
     {
         $user = auth()->user();
         
-        if ($user->role !== 'master_wilayah') {
-            abort(403, 'Hanya Master Wilayah yang dapat menambahkan data Lahan.');
+        if ($user->role !== 'penyuluh') {
+            abort(403, 'Hanya Penyuluh yang dapat menambahkan data Lahan.');
         }
 
         $request->validate([
             'name' => 'required|string|max:255',
             'kelompok_tani_id' => 'required|exists:kelompok_tanis,id',
             'klasifikasi' => 'nullable|string|max:255',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
-        // Verifikasi bahwa kelompok_tani_id yang dipilih benar-benar ada di wilayah master ini
+        // Verifikasi bahwa kelompok_tani_id yang dipilih benar-benar ada di wilayah penyuluh ini
         $ktd = KelompokTani::findOrFail($request->kelompok_tani_id);
         if ($ktd->wilayah_id !== $user->wilayah_id) {
             abort(403, 'Anda tidak dapat menambahkan lahan untuk KTD di luar wilayah Anda.');
+        }
+
+        $fotoPath = null;
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('lahans', 'public');
         }
 
         Lahan::create([
             'name' => $request->name,
             'kelompok_tani_id' => $request->kelompok_tani_id,
             'klasifikasi' => $request->klasifikasi,
+            'foto_path' => $fotoPath,
             'uploaded_by' => $user->id
         ]);
 
@@ -78,8 +86,8 @@ class LahanController extends Controller
     public function update(Request $request, $id)
     {
         $user = auth()->user();
-        if ($user->role !== 'master_wilayah') {
-            abort(403, 'Hanya Master Wilayah yang dapat mengubah Lahan.');
+        if ($user->role !== 'penyuluh') {
+            abort(403, 'Hanya Penyuluh yang dapat mengubah Lahan.');
         }
 
         $lahan = Lahan::where('uploaded_by', $user->id)->findOrFail($id);
@@ -88,6 +96,7 @@ class LahanController extends Controller
             'name' => 'required|string|max:255',
             'kelompok_tani_id' => 'required|exists:kelompok_tanis,id',
             'klasifikasi' => 'nullable|string|max:255',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
         $ktd = KelompokTani::findOrFail($request->kelompok_tani_id);
@@ -95,10 +104,19 @@ class LahanController extends Controller
             abort(403, 'Anda tidak dapat memindahkan lahan ke KTD di luar wilayah Anda.');
         }
 
+        $fotoPath = $lahan->foto_path;
+        if ($request->hasFile('foto')) {
+            if ($fotoPath && Storage::disk('public')->exists($fotoPath)) {
+                Storage::disk('public')->delete($fotoPath);
+            }
+            $fotoPath = $request->file('foto')->store('lahans', 'public');
+        }
+
         $lahan->update([
             'name' => $request->name,
             'kelompok_tani_id' => $request->kelompok_tani_id,
             'klasifikasi' => $request->klasifikasi,
+            'foto_path' => $fotoPath,
         ]);
 
         return back()->with('success', 'Data Lahan berhasil diperbarui!');
@@ -107,8 +125,8 @@ class LahanController extends Controller
     public function destroy($id)
     {
         $user = auth()->user();
-        if ($user->role !== 'master_wilayah') {
-            abort(403, 'Hanya Master Wilayah yang dapat menghapus Lahan.');
+        if ($user->role !== 'penyuluh') {
+            abort(403, 'Hanya Penyuluh yang dapat menghapus Lahan.');
         }
 
         $lahan = Lahan::where('uploaded_by', $user->id)->findOrFail($id);

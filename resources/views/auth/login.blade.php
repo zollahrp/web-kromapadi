@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mulyaharja Admin Panel - Login</title>
+    <title>PadiNexa - Login Admin</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -28,14 +29,15 @@
         <div class="relative z-10">
             <!-- Logo -->
             <div class="flex items-center gap-4 mb-16">
-                <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center shadow-sm">
-                    <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                    </svg>
+                <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-md border border-gray-100 overflow-hidden flex-shrink-0 p-1">
+                    <img src="{{ asset('images/logo.png') }}" 
+                         onerror="this.onerror=null; this.src='{{ asset('images/padinexa-logo-1.jpg') }}';" 
+                         alt="PadiNexa Logo" 
+                         class="w-full h-full object-contain">
                 </div>
                 <div>
-                    <h2 class="text-xl font-bold text-gray-900 leading-tight">Mulyaharja</h2>
-                    <p class="text-sm text-gray-500">Admin Panel</p>
+                    <h2 class="text-xl font-bold text-gray-900 leading-tight">PadiNexa</h2>
+                    <p class="text-sm text-gray-500">Smart Agriculture Platform</p>
                 </div>
             </div>
 

@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         // First, alter the enum for MySQL to include 'petani'
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'master_wilayah', 'ktd', 'petani') DEFAULT 'petani'");
+        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'penyuluh', 'ktd', 'petani') DEFAULT 'petani'");
 
         Schema::table('users', function (Blueprint $table) {
             // Add kelompok_tani_id reference
@@ -32,6 +32,6 @@ return new class extends Migration
         });
         
         // Revert enum back (might cause error if there are 'petani' rows, so just leave or ignore)
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'master_wilayah', 'ktd') DEFAULT 'ktd'");
+        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'penyuluh', 'ktd') DEFAULT 'ktd'");
     }
 };

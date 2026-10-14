@@ -10,6 +10,8 @@ class RiwayatScan extends Model
         'user_id',
         'lahan_id',
         'penyakit',
+        'bwd_value',
+        'bwd_status',
         'akurasi',
         'tindakan',
         'foto_path'

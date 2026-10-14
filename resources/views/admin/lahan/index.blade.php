@@ -133,7 +133,16 @@
                 <tr class="hover:bg-gray-50/50 transition-colors">
                     <td class="py-4 px-6 text-sm text-gray-500">{{ $index + 1 }}</td>
                     <td class="py-4 px-6">
-                        <div class="font-medium text-gray-900">{{ $lahan->name }}</div>
+                        <div class="flex items-center gap-3">
+                            @if($lahan->foto_path)
+                                <img src="{{ asset('storage/' . $lahan->foto_path) }}" alt="{{ $lahan->name }}" class="w-10 h-10 rounded-lg object-cover border border-gray-200">
+                            @else
+                                <div class="w-10 h-10 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                </div>
+                            @endif
+                            <div class="font-medium text-gray-900">{{ $lahan->name }}</div>
+                        </div>
                     </td>
                     <td class="py-4 px-6 text-sm text-gray-500">
                         {{ $lahan->kelompokTani ? $lahan->kelompokTani->name : '-' }}
@@ -185,7 +194,7 @@
 
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-visible shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full animate-modal relative z-10">
-            <form action="{{ route('lahan.store') }}" method="POST">
+            <form action="{{ route('lahan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start">
@@ -209,6 +218,10 @@
                                 <div>
                                     <label for="klasifikasi" class="block text-sm font-medium text-gray-700">Klasifikasi Lahan</label>
                                     <input type="text" name="klasifikasi" id="klasifikasi" class="mt-1 focus:ring-[#5C52E7] focus:border-[#5C52E7] block w-full shadow-sm sm:text-sm border-gray-300 rounded-xl px-4 py-2 border outline-none transition-colors" placeholder="Contoh: Sawah Irigasi, Ladang (Opsional)">
+                                </div>
+                                <div>
+                                    <label for="foto" class="block text-sm font-medium text-gray-700">Foto Lahan (Opsional)</label>
+                                    <input type="file" name="foto" id="foto" accept="image/*" class="mt-1 focus:ring-[#5C52E7] focus:border-[#5C52E7] block w-full shadow-sm sm:text-sm border-gray-300 rounded-xl px-4 py-2 border outline-none transition-colors">
                                 </div>
                             </div>
                         </div>
@@ -234,7 +247,7 @@
 
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-visible shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full animate-modal relative z-10">
-            <form id="form-edit" method="POST">
+            <form id="form-edit" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -259,6 +272,11 @@
                                 <div>
                                     <label for="edit_klasifikasi" class="block text-sm font-medium text-gray-700">Klasifikasi Lahan</label>
                                     <input type="text" name="klasifikasi" id="edit_klasifikasi" class="mt-1 focus:ring-[#5C52E7] focus:border-[#5C52E7] block w-full shadow-sm sm:text-sm border-gray-300 rounded-xl px-4 py-2 border outline-none transition-colors">
+                                </div>
+                                <div>
+                                    <label for="edit_foto" class="block text-sm font-medium text-gray-700">Foto Lahan (Opsional)</label>
+                                    <input type="file" name="foto" id="edit_foto" accept="image/*" class="mt-1 focus:ring-[#5C52E7] focus:border-[#5C52E7] block w-full shadow-sm sm:text-sm border-gray-300 rounded-xl px-4 py-2 border outline-none transition-colors">
+                                    <p class="text-xs text-gray-500 mt-1">Biarkan kosong jika tidak ingin mengubah foto saat ini.</p>
                                 </div>
                             </div>
                         </div>

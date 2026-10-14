@@ -13,13 +13,13 @@ class TandurController extends Controller
     {
         $user = auth()->user();
 
-        if (!in_array($user->role, ['super_admin', 'master_wilayah'])) {
+        if (!in_array($user->role, ['super_admin', 'penyuluh'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         $query = Tandur::with(['kelompokTani', 'lahan']);
 
-        if ($user->role === 'master_wilayah') {
+        if ($user->role === 'penyuluh') {
             $query->whereHas('kelompokTani', function($q) use ($user) {
                 $q->where('wilayah_id', $user->wilayah_id);
             });

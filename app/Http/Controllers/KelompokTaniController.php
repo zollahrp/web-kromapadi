@@ -13,16 +13,16 @@ class KelompokTaniController extends Controller
     {
         $user = auth()->user();
 
-        // Hanya super_admin atau master_wilayah yang boleh mengakses
-        if (!in_array($user->role, ['super_admin', 'master_wilayah'])) {
+        // Hanya super_admin atau penyuluh yang boleh mengakses
+        if (!in_array($user->role, ['super_admin', 'penyuluh'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         $query = KelompokTani::query();
 
         $wilayahs = null;
-        // Jika master_wilayah, hanya ambil KTD di wilayahnya
-        if ($user->role === 'master_wilayah') {
+        // Jika penyuluh, hanya ambil KTD di wilayahnya
+        if ($user->role === 'penyuluh') {
             if (!$user->wilayah_id) {
                 abort(403, 'Anda belum ditetapkan ke wilayah manapun.');
             }
@@ -54,11 +54,11 @@ class KelompokTaniController extends Controller
     {
         $user = auth()->user();
         
-        if (!in_array($user->role, ['super_admin', 'master_wilayah'])) {
-            abort(403, 'Hanya Super Admin atau Master Wilayah yang dapat membuat akun Kelompok Tani Desa.');
+        if (!in_array($user->role, ['super_admin', 'penyuluh'])) {
+            abort(403, 'Hanya Super Admin atau Penyuluh yang dapat membuat akun Kelompok Tani Desa.');
         }
 
-        $wilayah_id = $user->role === 'master_wilayah' ? $user->wilayah_id : $request->wilayah_id;
+        $wilayah_id = $user->role === 'penyuluh' ? $user->wilayah_id : $request->wilayah_id;
 
         if (!$wilayah_id) {
             return back()->withErrors(['error' => 'Harap tentukan atau miliki wilayah untuk Kelompok Tani.']);
@@ -97,11 +97,11 @@ class KelompokTaniController extends Controller
     {
         $user = auth()->user();
         
-        if (!in_array($user->role, ['super_admin', 'master_wilayah'])) {
-            abort(403, 'Hanya Super Admin atau Master Wilayah yang dapat mengubah KTD.');
+        if (!in_array($user->role, ['super_admin', 'penyuluh'])) {
+            abort(403, 'Hanya Super Admin atau Penyuluh yang dapat mengubah KTD.');
         }
 
-        if ($user->role === 'master_wilayah') {
+        if ($user->role === 'penyuluh') {
             $ktd = KelompokTani::where('wilayah_id', $user->wilayah_id)->findOrFail($id);
         } else {
             $ktd = KelompokTani::findOrFail($id);
@@ -142,11 +142,11 @@ class KelompokTaniController extends Controller
     {
         $user = auth()->user();
         
-        if (!in_array($user->role, ['super_admin', 'master_wilayah'])) {
-            abort(403, 'Hanya Super Admin atau Master Wilayah yang dapat menghapus KTD.');
+        if (!in_array($user->role, ['super_admin', 'penyuluh'])) {
+            abort(403, 'Hanya Super Admin atau Penyuluh yang dapat menghapus KTD.');
         }
 
-        if ($user->role === 'master_wilayah') {
+        if ($user->role === 'penyuluh') {
             $ktd = KelompokTani::where('wilayah_id', $user->wilayah_id)->findOrFail($id);
         } else {
             $ktd = KelompokTani::findOrFail($id);

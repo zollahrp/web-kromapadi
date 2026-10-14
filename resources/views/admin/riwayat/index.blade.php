@@ -57,6 +57,7 @@
                     <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Foto</th>
                     <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Hasil / Penyakit</th>
                     <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">KTD & Lahan</th>
+                    <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Petani</th>
                     <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Waktu Scan</th>
                     <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Aksi</th>
                 </tr>
@@ -76,13 +77,17 @@
                     </td>
                     <td class="py-4 px-6">
                         <div class="font-medium text-gray-900">{{ $riwayat->penyakit }}</div>
+                        <div class="text-xs text-gray-600 font-medium mt-1">BWD: {{ $riwayat->bwd_status ?? '-' }} ({{ $riwayat->bwd_value ?? '-' }})</div>
                         @if($riwayat->akurasi)
                             <div class="text-xs text-green-600 font-medium mt-1">Akurasi: {{ $riwayat->akurasi }}%</div>
                         @endif
                     </td>
                     <td class="py-4 px-6">
-                        <div class="text-sm font-medium text-gray-900">{{ $riwayat->user ? $riwayat->user->name : 'Unknown Petani' }}</div>
+                        <div class="text-sm font-medium text-gray-900">{{ ($riwayat->lahan && $riwayat->lahan->kelompokTani) ? $riwayat->lahan->kelompokTani->name : 'Tanpa KTD' }}</div>
                         <div class="text-xs text-gray-500 mt-1">{{ $riwayat->lahan ? $riwayat->lahan->name : '-' }}</div>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="text-sm text-gray-900">{{ $riwayat->user ? $riwayat->user->name : 'Unknown Petani' }}</div>
                     </td>
                     <td class="py-4 px-6 text-sm text-gray-500">{{ $riwayat->created_at->format('d M Y, H:i') }}</td>
                     <td class="py-4 px-6 flex items-center justify-end gap-3">

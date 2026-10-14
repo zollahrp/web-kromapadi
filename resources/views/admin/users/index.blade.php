@@ -35,7 +35,7 @@
 <div class="mb-8 flex justify-between items-end">
     <div>
         <h1 class="text-2xl font-bold text-gray-900">Pengguna Sistem</h1>
-        <p class="text-gray-500 mt-1 text-sm">Kelola akun Super Admin dan Master Wilayah.</p>
+        <p class="text-gray-500 mt-1 text-sm">Kelola akun Super Admin dan Penyuluh.</p>
     </div>
     <div>
         <button onclick="document.getElementById('modal-add').classList.remove('hidden')" class="bg-[#5C52E7] hover:bg-[#4a42b9] text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center gap-2">
@@ -137,13 +137,13 @@
             <select name="role" onchange="document.getElementById('filterForm').submit()" class="mt-1 focus:ring-[#5C52E7] focus:border-[#5C52E7] block w-full shadow-sm sm:text-sm border-gray-300 rounded-xl px-4 py-2 border outline-none transition-colors bg-white appearance-none cursor-pointer">
                 <option value="">Semua Role</option>
                 <option value="super_admin" {{ request('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
-                <option value="master_wilayah" {{ request('role') == 'master_wilayah' ? 'selected' : '' }}>Master Wilayah</option>
+                <option value="penyuluh" {{ request('role') == 'penyuluh' ? 'selected' : '' }}>Penyuluh</option>
             </select>
         </div>
         
         <!-- Filter Provinsi -->
         <div class="w-full md:w-48 flex-shrink-0">
-            <label class="block text-sm font-medium text-gray-700 mb-1 truncate">Provinsi (Master)</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1 truncate">Provinsi (Penyuluh)</label>
             <select name="provinsi" onchange="document.getElementById('filterForm').submit()" class="mt-1 focus:ring-[#5C52E7] focus:border-[#5C52E7] block w-full shadow-sm sm:text-sm border-gray-300 rounded-xl px-4 py-2 border outline-none transition-colors bg-white appearance-none cursor-pointer">
                 <option value="">Semua Provinsi</option>
                 @if(isset($provinsis))
@@ -191,7 +191,7 @@
                             </span>
                         @else
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                Master Wilayah
+                                Penyuluh
                             </span>
                         @endif
                     </td>
@@ -247,12 +247,12 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
                                     <select name="role" id="add_role" required  class="mt-1 block w-full">
-                                        <option value="master_wilayah">Master Wilayah</option>
+                                        <option value="penyuluh">Penyuluh</option>
                                         <option value="super_admin">Super Admin</option>
                                     </select>
                                 </div>
                                 <div id="add_wilayah_container">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Wilayah (Untuk Master Wilayah)</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Wilayah (Untuk Penyuluh)</label>
                                     <select name="wilayah_id" id="add_wilayah_id" class="mt-1 block w-full">
                                         <option value="">Pilih Wilayah...</option>
                                         @foreach($wilayahs as $wilayah)
@@ -306,12 +306,12 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
                                     <select name="role" id="edit_role" required  class="mt-1 block w-full">
-                                        <option value="master_wilayah">Master Wilayah</option>
+                                        <option value="penyuluh">Penyuluh</option>
                                         <option value="super_admin">Super Admin</option>
                                     </select>
                                 </div>
                                 <div id="edit_wilayah_container">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Wilayah (Untuk Master Wilayah)</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Wilayah (Untuk Penyuluh)</label>
                                     <select name="wilayah_id" id="edit_wilayah_id" class="mt-1 block w-full">
                                         <option value="">Pilih Wilayah...</option>
                                         @foreach($wilayahs as $wilayah)
@@ -380,7 +380,7 @@
         const container = document.getElementById(type + '_wilayah_container');
         if (!container) return;
         
-        if (role === 'master_wilayah') {
+        if (role === 'penyuluh') {
             container.style.display = 'block';
         } else {
             container.style.display = 'none';

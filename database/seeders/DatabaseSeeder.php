@@ -30,12 +30,12 @@ class DatabaseSeeder extends Seeder
             'name' => 'Mulyaharja',
         ]);
 
-        // Master Wilayah (Pak Faisal)
+        // Penyuluh (Pak Faisal)
         User::factory()->create([
-            'name' => 'Master Wilayah Mulyaharja',
+            'name' => 'Penyuluh Mulyaharja',
             'email' => 'wilayah@gmail.com',
             'password' => bcrypt('password'),
-            'role' => 'master_wilayah',
+            'role' => 'penyuluh',
             'wilayah_id' => $wilayah->id,
         ]);
     }

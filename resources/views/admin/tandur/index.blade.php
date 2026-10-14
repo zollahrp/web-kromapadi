@@ -126,7 +126,7 @@
         </div>
         
         <!-- Filter KTD -->
-        <div class="w-full md:w-64 flex-shrink-0">
+        <div class="w-full md:w-auto md:flex-1 md:max-w-xs flex-shrink-0">
             <label class="block text-sm font-medium text-gray-700 mb-1 truncate">Kelompok Tani (KTD)</label>
             <select name="ktd_id" id="filter_ktd_id" onchange="document.getElementById('filterForm').submit()" class="mt-1 block w-full focus:ring-[#5C52E7] focus:border-[#5C52E7] shadow-sm sm:text-sm border-gray-300 rounded-xl px-4 py-2 border outline-none transition-colors">
                 <option value="">Semua KTD</option>

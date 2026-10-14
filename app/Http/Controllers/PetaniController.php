@@ -16,8 +16,8 @@ class PetaniController extends Controller
         
         $ktd = KelompokTani::with(['wilayah', 'masterAdmin'])->findOrFail($ktd_id);
         
-        // Ensure Master Wilayah only accesses KTD in their Wilayah
-        if ($user->role === 'master_wilayah' && $ktd->wilayah_id !== $user->wilayah_id) {
+        // Ensure Penyuluh only accesses KTD in their Wilayah
+        if ($user->role === 'penyuluh' && $ktd->wilayah_id !== $user->wilayah_id) {
             abort(403, 'Anda tidak memiliki akses ke kelompok tani ini.');
         }
         

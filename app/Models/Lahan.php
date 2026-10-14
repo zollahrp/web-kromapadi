@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lahan extends Model
 {
-    protected $fillable = ['name', 'kelompok_tani_id', 'klasifikasi', 'uploaded_by'];
+    protected $fillable = ['name', 'kelompok_tani_id', 'klasifikasi', 'foto_path', 'uploaded_by'];
 
     public function kelompokTani()
     {

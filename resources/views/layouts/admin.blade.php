@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Kromapadi Admin')</title>
+    <title>@yield('title', 'PadiNexa Admin')</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -48,7 +49,7 @@
             
             <!-- Footer -->
             <footer class="mt-auto pt-6 border-t border-gray-200 text-sm text-gray-400 flex justify-between items-center max-w-[1400px] mx-auto w-full">
-                <div>&copy; {{ date('Y') }} Mulyaharja Admin Panel. All rights reserved.</div>
+                <div>&copy; {{ date('Y') }} PadiNexa Admin Panel. All rights reserved.</div>
                 <div>Versi 1.0.0</div>
             </footer>
         </main>

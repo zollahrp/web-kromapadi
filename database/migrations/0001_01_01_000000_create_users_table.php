@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['super_admin', 'master_wilayah', 'ktd'])->default('ktd');
+            $table->enum('role', ['super_admin', 'penyuluh', 'ktd'])->default('ktd');
             $table->unsignedBigInteger('wilayah_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
